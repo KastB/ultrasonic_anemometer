@@ -41,27 +41,27 @@ def theta2vs(t):
 
 
 def vw2dp(f, cal, vs, vw):
-    return (cal / (vs + vw) - cal / vs) * f
+    return ((cal / (vs + vw) - cal / vs) * f) % 1.0
 
 
-def calculate(theta, cal, f, p1r, p2r, p3r, p4r):
+def calculate(theta, cal1, cal2,cal3,cal4, f, p1r, p2r, p3r, p4r):
     vs = theta2vs(theta)
-    v1 = cal / (cal / vs + p1r / f) - vs
-    v2 = cal / (cal / vs + p2r / f) - vs
-    v3 = cal / (cal / vs + p3r / f) - vs
-    v4 = cal / (cal / vs + p4r / f) - vs
+    v1 = cal1 / (cal1 / vs + p1r / f) - vs
+    v2 = cal2 / (cal2 / vs + p2r / f) - vs
+    v3 = cal3 / (cal3 / vs + p3r / f) - vs
+    v4 = cal4 / (cal4 / vs + p4r / f) - vs
 
     sc2 = math.sqrt(v1 * v1 + v3 * v3)
     oc2 = math.atan2(v1, v3)
     sc3 = math.sqrt(v2 * v2 + v4 * v4)
     oc3 = math.atan2(v2, v4) + math.pi / 4.0
-    oc = math.atan2(math.sin(oc2) + math.sin(oc3), math.cos(oc2) + math.cos(oc3))
+    oc  = math.atan2(math.sin(oc2) + math.sin(oc3), math.cos(oc2) + math.cos(oc3))
 
     sc = (sc2 + sc3) / 2.0
     return oc, sc, oc2, sc2, oc3, sc3
 
 def main():
-    plt.ylim([-20, 20])
+    plt.ylim([-5, 5])
     plt.xlim([-180, 180])
 
     x = []
@@ -77,14 +77,14 @@ def main():
     freq = 40000
     cal = 12.0 / freq * vs  # distance between transievers [m]
     samples = 1000
-    phase_deviation = 0.001
+    phase_deviation = 1.0/2048
     temperature_deviation = 10.0
     calibration_deviation = 0.001
     frequency_deviation = 1000
     epsilon = 1.0/samples
 
     for o in range(-180, 180, 1):
-        s = 1
+        s = 5
 
         v1r = s * math.sin(deg2rad(o))
         v3r = s * math.cos(deg2rad(o))
@@ -98,12 +98,15 @@ def main():
         p4r_a = np.random.normal(vw2dp(freq, cal, vs, v4r), phase_deviation, samples)
 
         t_a = np.random.normal(theta, temperature_deviation, samples)
-        d_a = np.random.normal(cal, calibration_deviation, samples)
+        d1_a = np.random.normal(cal, calibration_deviation, samples)
+        d2_a = np.random.normal(cal, calibration_deviation, samples)
+        d3_a = np.random.normal(cal, calibration_deviation, samples)
+        d4_a = np.random.normal(cal, calibration_deviation, samples)
         f_a = np.random.normal(freq, frequency_deviation, samples)
 
 
         for i in range (0,len(p1r_a)):
-            (oc, sc, oc2, sc2, oc3, sc3) = calculate(t_a[i], d_a[i], f_a[i], p1r_a[i], p2r_a[i], p3r_a[i], p4r_a[i])
+            (oc, sc, oc2, sc2, oc3, sc3) = calculate(t_a[i], d1_a[i], d2_a[i], d3_a[i], d4_a[i], f_a[i], p1r_a[i], p2r_a[i], p3r_a[i], p4r_a[i])
 
             x.append(o + i * epsilon)
             y1.append(normalize_d(rad2deg(oc) - o))
