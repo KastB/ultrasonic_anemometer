@@ -1,8 +1,9 @@
 smoothness = 100;
 h = 60;
 r = 140;
-inner_h = 50;
-inner_r = 135;
+outer_wall = 5;
+
+inner_h = h - 2*outer_wall;
 
 sensor_r = 8;
 sensor_w = 3;
@@ -104,7 +105,7 @@ union() {
         cylinder(h =h - inner_h, r1 = sensor_cable_hole_r, r2 = sensor_cable_hole_r,center = false, $fn = smoothness);
             
         }
-        cylinder(h = inner_h, r1 = inner_r, r2 = inner_r,center = false, $fn = smoothness);
+        cylinder(h = inner_h, r1 = r - outer_wall, r2 = r - outer_wall,center = false, $fn = smoothness);
     }
     union() {
         difference() {
