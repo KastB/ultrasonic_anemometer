@@ -41,7 +41,12 @@ def theta2vs(t):
 
 
 def vw2dp(f, cal, vs, vw):
-    return ((cal / (vs + vw) - cal / vs) * f) % 1.0
+    p =  ((cal / (vs + vw) - cal / vs) * f)
+    while p > 0.5:
+        p = p - 1.0
+    while p < -0.5:
+        p = p + 1.0
+    return p
 
 
 def calculate(theta, cal1, cal2,cal3,cal4, f, p1r, p2r, p3r, p4r):
@@ -84,7 +89,7 @@ def main():
     epsilon = 1.0/samples
 
     for o in range(-180, 180, 1):
-        s = 5
+        s = 5.0
 
         v1r = s * math.sin(deg2rad(o))
         v3r = s * math.cos(deg2rad(o))
@@ -118,7 +123,7 @@ def main():
             y6.append(sc3 - s)
 
     plt.plot(x, y1, '-')
-    #plt.plot(x, y3, 'g-')
+    plt.plot(x, y2, 'r-')
     print ("orientation mean :" + str(statistics.mean(y1)))
     print ("orientation variance: " + str(statistics.variance(y1)))
     print("speed mean :" + str(statistics.mean(y2)))
