@@ -1,0 +1,16 @@
+Circuit: * Z:\home\bernd\Downloads\test_PLL.asc
+
+WARNING: Node OUT is floating.
+WARNING: Node N005 is floating.
+
+WARNING: Less than two connections to node OUT.  This node is used by A1.
+WARNING: Less than two connections to node N006.  This node is used by A1.
+WARNING: Less than two connections to node N005.  This node is used by R1.
+WARNING: Less than two connections to node N001.  This node is used by A2.
+Direct Newton iteration for .op point succeeded.
+Singular matrix:  Check node out
+   Iteration No. 1
+Fatal Error: Singular matrix:  check node out
+   Iteration No. 1
+
+This circuit has floating nodes.
